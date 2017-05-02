@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--MATERIAL DESIGN COLOURS-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#CDDC39</color>
+    <color name="colorPrimaryLight">#C5CAE9</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+    <color name="colorControlNormal">@color/colorAccent</color>
+    <color name="colorControlHighlight">@color/colorAccent</color>
+    <color name="colorControlActivated">@color/colorAccent</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
+    <!--IMAGE PLACEHOLDER COLOUR FOR IMAGE LOADING-->
+    <color name="imagePlaceholder">#CCCCCC</color>
+
+
+</resources>

@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Moviepedia</string>
+
+    <string name="detail_rating">Rating</string>
+    <string name="detail_director">Director</string>
+    <string name="detail_actors">Actors</string>
+    <string name="detail_writer">Writer</string>
+    <string name="detail_awards">Awards</string>
+
+    <string name="detail_genre">Genre</string>
+    <string name="detail_plot">Plot</string>
+
+
+    <string name="connection_failure">Connection failure. Please try again later</string>
+    <string name="empty_text">No results found</string>
+    <string name="empty_text_first_time">Search for a movie title</string>
+    <string name="contentDescriptionPoster">Title Poster</string>
+
+</resources>
