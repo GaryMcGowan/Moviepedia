@@ -2,7 +2,7 @@ package com.garymcgowan.moviepedia.dagger;
 
 import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.view.DetailsActivity;
-import com.garymcgowan.moviepedia.view.ListActivity;
+import com.garymcgowan.moviepedia.view.MovieListActivity;
 
 import javax.inject.Singleton;
 
@@ -19,6 +19,6 @@ public interface ApplicationComponent {
 
     void inject(DetailsActivity fragment);
 
-    void inject(ListActivity activity);
+    void inject(MovieListActivity activity);
 
 }

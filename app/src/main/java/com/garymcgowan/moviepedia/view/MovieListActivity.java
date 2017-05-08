@@ -42,7 +42,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import timber.log.Timber;
 
-public class ListActivity extends AppCompatActivity {
+public class MovieListActivity extends AppCompatActivity implements MovieListActivityView {
 
     private static final long QUERY_UPDATE_DELAY_MILLIS = 400;
     private CompositeDisposable disposables = new CompositeDisposable();
@@ -53,12 +53,17 @@ public class ListActivity extends AppCompatActivity {
     @BindView(R.id.emptyTextView) TextView emptyTextView;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
+    MovieListActivityPresenter presenter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
         App.getApplicationComponent().inject(this);
+
+
+        presenter = new MovieListActivityPresenter(this, null);
 
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -74,13 +79,13 @@ public class ListActivity extends AppCompatActivity {
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
-        SearchManager searchManager = (SearchManager) ListActivity.this.getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) MovieListActivity.this.getSystemService(Context.SEARCH_SERVICE);
 
         if (searchItem != null) {
             setSearchView((SearchView) searchItem.getActionView());
         }
         if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(ListActivity.this.getComponentName()));
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(MovieListActivity.this.getComponentName()));
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -167,6 +172,11 @@ public class ListActivity extends AppCompatActivity {
 
             recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(list));
         }
+    }
+
+    @Override
+    public void displayMovies(List<Movie> movies) {
+
     }
 
     class SimpleItemRecyclerViewAdapter
