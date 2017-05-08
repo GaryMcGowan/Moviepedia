@@ -45,6 +45,7 @@ local.properties
 # IntelliJ files
 .idea
 !.idea/codeStyleSettings.xml
+!/.idea/codeStyleSettings.xml
 *.iml
  
 # OSX files
