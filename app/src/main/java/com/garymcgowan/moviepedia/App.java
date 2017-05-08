@@ -7,10 +7,6 @@ import com.garymcgowan.moviepedia.dagger.ApplicationModule;
 import com.garymcgowan.moviepedia.dagger.DaggerApplicationComponent;
 import com.garymcgowan.moviepedia.dagger.NetworkModule;
 
-/**
- * Created by Gary on 2016/10/31.
- */
-
 public class App extends Application {
 
     public static final String mBaseUrl = "http://www.omdbapi.com";

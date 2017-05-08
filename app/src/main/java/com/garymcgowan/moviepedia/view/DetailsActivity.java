@@ -30,32 +30,20 @@ public class DetailsActivity extends AppCompatActivity {
     public static final String ARG_ITEM_ID = "imdb_id";
     public static final String ARG_ITEM_TITLE = "movie_title";
 
-    @Inject
-    MoviesAPI moviesAPI;
+    @Inject MoviesAPI moviesAPI;
     Movie movie = null;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.toolbar_layout)
-    CollapsingToolbarLayout collapsingToolbar;
-    @BindView(R.id.posterImageView)
-    ImageView posterImageView;
-    @BindView(R.id.ratedTextView)
-    TextView ratedTextView;
-    @BindView(R.id.runtimeTextView)
-    TextView runtimeTextView;
-    @BindView(R.id.plotTextView)
-    TextView plotTextView;
-    @BindView(R.id.ratingTextView)
-    TextView ratingTextView;
-    @BindView(R.id.directorTextView)
-    TextView directorTextView;
-    @BindView(R.id.actorsTextView)
-    TextView actorsTextView;
-    @BindView(R.id.writerTextView)
-    TextView writerTextView;
-    @BindView(R.id.awardsTextView)
-    TextView awardsTextView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.posterImageView) ImageView posterImageView;
+    @BindView(R.id.ratedTextView) TextView ratedTextView;
+    @BindView(R.id.runtimeTextView) TextView runtimeTextView;
+    @BindView(R.id.plotTextView) TextView plotTextView;
+    @BindView(R.id.ratingTextView) TextView ratingTextView;
+    @BindView(R.id.directorTextView) TextView directorTextView;
+    @BindView(R.id.actorsTextView) TextView actorsTextView;
+    @BindView(R.id.writerTextView) TextView writerTextView;
+    @BindView(R.id.awardsTextView) TextView awardsTextView;
 
     private Subscription subscription;
 
@@ -67,8 +55,10 @@ public class DetailsActivity extends AppCompatActivity {
         App.getApplicationComponent().inject(this);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         //clear dummy text
         ratedTextView.setText(null);

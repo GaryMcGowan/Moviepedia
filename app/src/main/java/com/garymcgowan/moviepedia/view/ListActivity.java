@@ -43,24 +43,16 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by Gary on 2016/10/27.
- */
-
 public class ListActivity extends AppCompatActivity {
 
     private static final long QUERY_UPDATE_DELAY_MILLIS = 400;
     private Subscription subscription = null;
     SearchView searchView = null;
 
-    @Inject
-    MoviesAPI moviesAPI;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.emptyTextView)
-    TextView emptyTextView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    @Inject MoviesAPI moviesAPI;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.emptyTextView) TextView emptyTextView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,12 +101,7 @@ public class ListActivity extends AppCompatActivity {
                 // debounce 400ms
                 // flatmap
                 subscription = RxSearchView.queryTextChanges(searchView)
-                        .filter(new Func1<CharSequence, Boolean>() {
-                            @Override
-                            public Boolean call(CharSequence s) {
-                                return s.length() > 1;
-                            }
-                        })
+                        .filter(s -> s.length() > 1)
                         .debounce(QUERY_UPDATE_DELAY_MILLIS, TimeUnit.MILLISECONDS)
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .observeOn(Schedulers.io())
@@ -185,12 +172,12 @@ public class ListActivity extends AppCompatActivity {
         }
     }
 
-    public class SimpleItemRecyclerViewAdapter
+    class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Movie> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<Movie> items) {
+        SimpleItemRecyclerViewAdapter(List<Movie> items) {
             mValues = items;
         }
 
@@ -215,18 +202,15 @@ public class ListActivity extends AppCompatActivity {
                     .error(R.color.imagePlaceholder)
                     .into(holder.posterImageView);
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //launch details intent
-                    Context context = v.getContext();
-                    Intent intent = new Intent(context, DetailsActivity.class);
-                    intent.putExtra(DetailsActivity.ARG_ITEM_ID, holder.mItem.getImdbID());
-                    intent.putExtra(DetailsActivity.ARG_ITEM_TITLE, holder.mItem.getTitle());
+            holder.mView.setOnClickListener(v -> {
+                //launch details intent
+                Context context = v.getContext();
+                Intent intent = new Intent(context, DetailsActivity.class);
+                intent.putExtra(DetailsActivity.ARG_ITEM_ID, holder.mItem.getImdbID());
+                intent.putExtra(DetailsActivity.ARG_ITEM_TITLE, holder.mItem.getTitle());
 
-                    context.startActivity(intent);
+                context.startActivity(intent);
 
-                }
             });
         }
 
@@ -237,17 +221,15 @@ public class ListActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public Movie mItem;
+        class ViewHolder extends RecyclerView.ViewHolder {
+            final View mView;
+            Movie mItem;
 
-            @BindView(R.id.titleTextView)
-            TextView titleTextView;
-            @BindView(R.id.posterImageView)
-            ImageView posterImageView;
+            @BindView(R.id.titleTextView) TextView titleTextView;
+            @BindView(R.id.posterImageView) ImageView posterImageView;
 
 
-            public ViewHolder(View view) {
+            ViewHolder(View view) {
                 super(view);
                 ButterKnife.bind(this, view);
                 mView = view;
