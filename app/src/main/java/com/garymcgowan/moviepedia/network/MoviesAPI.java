@@ -3,9 +3,10 @@ package com.garymcgowan.moviepedia.network;
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.model.Search;
 
+import io.reactivex.Flowable;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by Gary on 2016/11/09.
@@ -30,23 +31,23 @@ public interface MoviesAPI {
     String FALSE = "false";
 
     @GET("/")
-    Observable<Search> getObservableMoviesSearch(@Query("s") String search,
-                                                 @Query("type") String type,// movie, series, episode
-                                                 @Query("y") Integer year,
-                                                 @Query("r") Boolean responseType,//json, xml
-                                                 @Query("page") Integer page,
-                                                 @Query("callback") String callback,
-                                                 @Query("v") Integer apiVersion);
+    Flowable<Search> getObservableMoviesSearch(@Query("s") String search,
+                                               @Query("type") String type,// movie, series, episode
+                                               @Query("y") Integer year,
+                                               @Query("r") Boolean responseType,//json, xml
+                                               @Query("page") Integer page,
+                                               @Query("callback") String callback,
+                                               @Query("v") Integer apiVersion);
 
     @GET("/")
-    Observable<Movie> getObservableMovie(@Query("i") String id,
-                                         @Query("t") String title,
-                                         @Query("type") String type,// movie, series, episode
-                                         @Query("y") Integer year,
-                                         @Query("plot") String plotLength,//short, full
-                                         @Query("r") Boolean responseType,//json, xml
-                                         @Query("tomatoes") Boolean tomatoes,
-                                         @Query("callback") String callback,
-                                         @Query("v") Integer apiVersion);
+    Single<Movie> getObservableMovie(@Query("i") String id,
+                                     @Query("t") String title,
+                                     @Query("type") String type,// movie, series, episode
+                                     @Query("y") Integer year,
+                                     @Query("plot") String plotLength,//short, full
+                                     @Query("r") Boolean responseType,//json, xml
+                                     @Query("tomatoes") Boolean tomatoes,
+                                     @Query("callback") String callback,
+                                     @Query("v") Integer apiVersion);
 
 }

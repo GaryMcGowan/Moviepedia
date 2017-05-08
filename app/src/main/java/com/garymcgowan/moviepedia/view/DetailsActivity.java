@@ -3,7 +3,6 @@ package com.garymcgowan.moviepedia.view;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,44 +19,34 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class DetailsActivity extends AppCompatActivity {
 
     public static final String ARG_ITEM_ID = "imdb_id";
     public static final String ARG_ITEM_TITLE = "movie_title";
 
-    @Inject
-    MoviesAPI moviesAPI;
+    @Inject MoviesAPI moviesAPI;
     Movie movie = null;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.toolbar_layout)
-    CollapsingToolbarLayout collapsingToolbar;
-    @BindView(R.id.posterImageView)
-    ImageView posterImageView;
-    @BindView(R.id.ratedTextView)
-    TextView ratedTextView;
-    @BindView(R.id.runtimeTextView)
-    TextView runtimeTextView;
-    @BindView(R.id.plotTextView)
-    TextView plotTextView;
-    @BindView(R.id.ratingTextView)
-    TextView ratingTextView;
-    @BindView(R.id.directorTextView)
-    TextView directorTextView;
-    @BindView(R.id.actorsTextView)
-    TextView actorsTextView;
-    @BindView(R.id.writerTextView)
-    TextView writerTextView;
-    @BindView(R.id.awardsTextView)
-    TextView awardsTextView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbar;
+    @BindView(R.id.posterImageView) ImageView posterImageView;
+    @BindView(R.id.ratedTextView) TextView ratedTextView;
+    @BindView(R.id.runtimeTextView) TextView runtimeTextView;
+    @BindView(R.id.plotTextView) TextView plotTextView;
+    @BindView(R.id.ratingTextView) TextView ratingTextView;
+    @BindView(R.id.directorTextView) TextView directorTextView;
+    @BindView(R.id.actorsTextView) TextView actorsTextView;
+    @BindView(R.id.writerTextView) TextView writerTextView;
+    @BindView(R.id.awardsTextView) TextView awardsTextView;
 
-    private Subscription subscription;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +56,10 @@ public class DetailsActivity extends AppCompatActivity {
         App.getApplicationComponent().inject(this);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+        }
 
         //clear dummy text
         ratedTextView.setText(null);
@@ -89,26 +80,21 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         if (imdbId != null) {
-            subscription = moviesAPI.getObservableMovie(imdbId, null, null, null, null, null, null, null, null)
+            disposables.add(moviesAPI.getObservableMovie(imdbId, null, null, null, null, null, null, null, null)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Movie>() {
+                    .subscribeWith(new DisposableSingleObserver<Movie>() {
                         @Override
-                        public void onCompleted() {
-                            Log.d("MOVIES", "onCompleted");
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d("MOVIES", "onError: " + e);
-                        }
-
-                        @Override
-                        public void onNext(Movie movie) {
-                            Log.d("MOVIES", "onNext");
+                        public void onSuccess(@NonNull Movie movie) {
+                            Timber.d("onSuccess " + movie.toString());
                             setMovie(movie);
                         }
-                    });
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            Timber.d("onError: " + e.getLocalizedMessage());
+                        }
+                    }));
         }
     }
 
@@ -156,7 +142,8 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscription != null && subscription.isUnsubscribed())
-            subscription.unsubscribe();
+        if (disposables != null) {
+            disposables.clear();
+        }
     }
 }

@@ -14,10 +14,8 @@ public class BaseOMDBResponse {
 //            "Error": "Movie not found!"
 //    }
 
-    @SerializedName("Response")
-    boolean response;
-    @SerializedName("Error")
-    String error;
+    @SerializedName("Response") boolean response;
+    @SerializedName("Error") String error;
 
 
     public boolean isResponse() {
