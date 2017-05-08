@@ -3,7 +3,6 @@ package com.garymcgowan.moviepedia.view;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,10 +19,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -45,7 +46,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.writerTextView) TextView writerTextView;
     @BindView(R.id.awardsTextView) TextView awardsTextView;
 
-    private Subscription subscription;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,26 +80,21 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         if (imdbId != null) {
-            subscription = moviesAPI.getObservableMovie(imdbId, null, null, null, null, null, null, null, null)
+            disposables.add(moviesAPI.getObservableMovie(imdbId, null, null, null, null, null, null, null, null)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Movie>() {
+                    .subscribeWith(new DisposableSingleObserver<Movie>() {
                         @Override
-                        public void onCompleted() {
-                            Log.d("MOVIES", "onCompleted");
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d("MOVIES", "onError: " + e);
-                        }
-
-                        @Override
-                        public void onNext(Movie movie) {
-                            Log.d("MOVIES", "onNext");
+                        public void onSuccess(@NonNull Movie movie) {
+                            Timber.d("onSuccess " + movie.toString());
                             setMovie(movie);
                         }
-                    });
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            Timber.d("onError: " + e.getLocalizedMessage());
+                        }
+                    }));
         }
     }
 
@@ -146,7 +142,8 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscription != null && subscription.isUnsubscribed())
-            subscription.unsubscribe();
+        if (disposables != null) {
+            disposables.clear();
+        }
     }
 }

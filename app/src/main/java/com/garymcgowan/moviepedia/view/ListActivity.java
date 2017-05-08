@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +25,7 @@ import com.garymcgowan.moviepedia.R;
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.model.Search;
 import com.garymcgowan.moviepedia.network.MoviesAPI;
-import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -36,17 +35,17 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
+import timber.log.Timber;
 
 public class ListActivity extends AppCompatActivity {
 
     private static final long QUERY_UPDATE_DELAY_MILLIS = 400;
-    private Subscription subscription = null;
+    private CompositeDisposable disposables = new CompositeDisposable();
     SearchView searchView = null;
 
     @Inject MoviesAPI moviesAPI;
@@ -93,49 +92,46 @@ public class ListActivity extends AppCompatActivity {
 
             if (searchView != null) {
                 //clean up old subscription
-                if (subscription != null && subscription.isUnsubscribed())
-                    subscription.unsubscribe();
+                if (disposables != null)
+                    disposables.clear();
 
                 //subscribe again
                 // filter characters >1
                 // debounce 400ms
                 // flatmap
-                subscription = RxSearchView.queryTextChanges(searchView)
-                        .filter(s -> s.length() > 1)
-                        .debounce(QUERY_UPDATE_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-                        .subscribeOn(AndroidSchedulers.mainThread())
-                        .observeOn(Schedulers.io())
-                        .flatMap(new Func1<CharSequence, Observable<Search>>() {
-                            @Override
-                            public Observable<Search> call(CharSequence s) {
-                                Log.d("MOVIES", "search:  " + s);
-                                return moviesAPI.getObservableMoviesSearch(s.toString(), null, null, null, null, null, null)
+                disposables.add(
+                        RxSearchView.queryTextChanges(searchView)
+                                .toFlowable(BackpressureStrategy.LATEST)
+                                .filter(s -> s.length() > 1)
+                                .subscribeOn(AndroidSchedulers.mainThread())
+                                .debounce(QUERY_UPDATE_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+                                .flatMap(s -> moviesAPI.getObservableMoviesSearch(s.toString(),
+                                        null, null, null, null, null,
+                                        null)
+                                        .subscribeOn(Schedulers.io())
 
-                                        //return MoviesRestAdapter.getMovieListObservable(s.toString())
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribeOn(Schedulers.io());
-                            }
-                        })
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<Search>() {
-                            @Override
-                            public void onCompleted() {
-                                Log.d("MOVIES", "onCompleted");
-                            }
+                                )
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeWith(new DisposableSubscriber<Search>() {
+                                    @Override
+                                    public void onNext(Search search) {
+                                        if (search == null)
+                                            Snackbar.make(searchView, R.string.connection_failure, Snackbar.LENGTH_LONG).show();
+                                        else
+                                            setupRecyclerView(recyclerView, search.search);
+                                    }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.d("MOVIES", "onError: " + e);
-                            }
+                                    @Override
+                                    public void onError(Throwable t) {
+                                        Timber.d("onError: " + t);
+                                        Timber.e(t);
+                                    }
 
-                            @Override
-                            public void onNext(Search search) {
-                                if (search == null)
-                                    Snackbar.make(searchView, R.string.connection_failure, Snackbar.LENGTH_LONG).show();
-                                else
-                                    setupRecyclerView(recyclerView, search.search);
-                            }
-                        });
+                                    @Override
+                                    public void onComplete() {
+
+                                    }
+                                }));
             }
         }
     }
@@ -143,8 +139,9 @@ public class ListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscription != null && subscription.isUnsubscribed())
-            subscription.unsubscribe();
+        if (disposables != null) {
+            disposables.clear();
+        }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Movie> list) {
@@ -241,5 +238,4 @@ public class ListActivity extends AppCompatActivity {
             }
         }
     }
-
 }

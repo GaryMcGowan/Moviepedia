@@ -8,46 +8,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class Movie extends BaseOMDBResponse {
     //Summary fields (returned by search)
-    @SerializedName("Title")
-    String title;
-    @SerializedName("Year")
-    String year;
-    @SerializedName("imdbID")
-    String imdbID;
-    @SerializedName("Type")
-    String type;
-    @SerializedName("Poster")
-    String posterURL;
+    @SerializedName("Title") String title;
+    @SerializedName("Year") String year;
+    @SerializedName("imdbID") String imdbID;
+    @SerializedName("Type") String type;
+    @SerializedName("Poster") String posterURL;
 
     //Detail fields
-    @SerializedName("Rated")
-    String rated;
-    @SerializedName("Released")
-    String released;
-    @SerializedName("Runtime")
-    String runtime;
-    @SerializedName("Genre")
-    String genre;
-    @SerializedName("Director")
-    String director;
-    @SerializedName("Writer")
-    String writer;
-    @SerializedName("Actors")
-    String actors;
-    @SerializedName("Plot")
-    String plot;
-    @SerializedName("Language")
-    String language;
-    @SerializedName("Country")
-    String country;
-    @SerializedName("Awards")
-    String awards;
-    @SerializedName("Metascore")
-    String metascore;
-    @SerializedName("imdbRating")
-    String imdbRating;
-    @SerializedName("imdbVotes")
-    String imdbVotes;
+    @SerializedName("Rated") String rated;
+    @SerializedName("Released") String released;
+    @SerializedName("Runtime") String runtime;
+    @SerializedName("Genre") String genre;
+    @SerializedName("Director") String director;
+    @SerializedName("Writer") String writer;
+    @SerializedName("Actors") String actors;
+    @SerializedName("Plot") String plot;
+    @SerializedName("Language") String language;
+    @SerializedName("Country") String country;
+    @SerializedName("Awards") String awards;
+    @SerializedName("Metascore") String metascore;
+    @SerializedName("imdbRating") String imdbRating;
+    @SerializedName("imdbVotes") String imdbVotes;
 
 
     public String getTitle() {

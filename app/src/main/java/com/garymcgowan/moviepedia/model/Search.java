@@ -11,8 +11,7 @@ import java.util.List;
 public class Search extends BaseOMDBResponse {
 
 
-    @SerializedName("Search")
-    public List<Movie> search;
+    @SerializedName("Search") public List<Movie> search;
     public int totalResults;
 
 }
