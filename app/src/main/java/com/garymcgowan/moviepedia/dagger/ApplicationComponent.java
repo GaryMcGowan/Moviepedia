@@ -1,6 +1,7 @@
 package com.garymcgowan.moviepedia.dagger;
 
 import com.garymcgowan.moviepedia.App;
+import com.garymcgowan.moviepedia.model.MovieRepository;
 import com.garymcgowan.moviepedia.view.DetailsActivity;
 import com.garymcgowan.moviepedia.view.MovieListActivity;
 
@@ -20,5 +21,7 @@ public interface ApplicationComponent {
     void inject(DetailsActivity fragment);
 
     void inject(MovieListActivity activity);
+
+    void inject(MovieRepository movieRepository);
 
 }

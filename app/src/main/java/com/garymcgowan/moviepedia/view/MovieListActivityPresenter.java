@@ -16,7 +16,12 @@ public class MovieListActivityPresenter {
         this.movieRepository = movieRepository;
     }
 
-    public void loadMovies() {
-        view.displayMovies(movieRepository.getMovieSearch(""));
+    public void loadMovies(String search) {
+        try {
+            view.displayMovies(movieRepository.getMovieSearch(search));
+        } catch (Exception e) {
+            e.printStackTrace();
+            view.displayError();
+        }
     }
 }

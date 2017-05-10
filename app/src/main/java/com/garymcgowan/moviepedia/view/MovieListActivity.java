@@ -36,6 +36,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -62,14 +63,14 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
         ButterKnife.bind(this);
         App.getApplicationComponent().inject(this);
 
-
-        presenter = new MovieListActivityPresenter(this, null);
-
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
         toolbar.setNavigationIcon(R.mipmap.movie_white);
         assert recyclerView != null;
         setupRecyclerView(recyclerView, null);
+
+        presenter = new MovieListActivityPresenter(this, null);
+
     }
 
     @Override
@@ -175,7 +176,12 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
     }
 
     @Override
-    public void displayMovies(List<Movie> movies) {
+    public void displayMovies(Flowable<List<Movie>> movies) {
+
+    }
+
+    @Override
+    public void displayError() {
 
     }
 
