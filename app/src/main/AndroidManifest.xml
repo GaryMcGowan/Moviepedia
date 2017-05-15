@@ -28,7 +28,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="com.garymcgowan.moviepedia.view.DetailsActivity"
+            android:name="com.garymcgowan.moviepedia.view.MovieDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>

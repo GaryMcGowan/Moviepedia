@@ -24,7 +24,6 @@ import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.R;
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.model.OmdbMovieRepository;
-import com.garymcgowan.moviepedia.network.MoviesAPI;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.squareup.picasso.Picasso;
 
@@ -36,19 +35,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
 public class MovieListActivity extends AppCompatActivity implements MovieListActivityView {
 
-    private CompositeDisposable disposables = new CompositeDisposable();
-    SearchView searchView = null;
+    @Inject OmdbMovieRepository movieRepository;
 
-    @Inject MoviesAPI moviesAPI;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.emptyTextView) TextView emptyTextView;
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     MovieListActivityPresenter presenter;
+    SearchView searchView = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,7 +63,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
 
         setupRecyclerView(recyclerView, null);
 
-        presenter = new MovieListActivityPresenter(this, new OmdbMovieRepository(moviesAPI), AndroidSchedulers.mainThread());
+        presenter = new MovieListActivityPresenter(this, movieRepository, AndroidSchedulers.mainThread());
 
         if (searchView != null)
             presenter.setSearchTermObservable(RxSearchView.queryTextChanges(searchView)
@@ -103,59 +101,17 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
                     presenter.setSearchTermObservable(RxSearchView.queryTextChanges(searchView)
                             .toFlowable(BackpressureStrategy.LATEST)
                             .map(CharSequence::toString));
-
-                //clean up old subscription
-//                if (disposables != null)
-//                    disposables.clear();
-
-                //subscribe again
-                // filter characters >1
-                // debounce 400ms
-                // flatmap
-//                disposables.add(
-//                        RxSearchView.queryTextChanges(searchView)
-//                                .toFlowable(BackpressureStrategy.LATEST)
-//                                .filter(s -> s.length() > 1)
-//                                .subscribeOn(AndroidSchedulers.mainThread())
-//                                .debounce(QUERY_UPDATE_DELAY_MILLIS, TimeUnit.MILLISECONDS)
-//                                .flatMap(s -> moviesAPI.getObservableMoviesSearch(s.toString(),
-//                                        null, null, null, null, null,
-//                                        null)
-//                                        .subscribeOn(Schedulers.io())
-//
-//                                )
-//                                .observeOn(AndroidSchedulers.mainThread())
-//                                .subscribeWith(new DisposableSubscriber<Search>() {
-//                                    @Override
-//                                    public void onNext(Search search) {
-//                                        if (search == null)
-//                                            Snackbar.make(searchView, R.string.connection_failure, Snackbar.LENGTH_LONG).show();
-//                                        else
-//                                            setupRecyclerView(recyclerView, search.search);
-//                                    }
-//
-//                                    @Override
-//                                    public void onError(Throwable t) {
-//                                        Timber.d("onError: " + t);
-//                                        Timber.e(t);
-//                                    }
-//
-//                                    @Override
-//                                    public void onComplete() {
-//
-//                                    }
-//                                }));
             }
         }
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        if (disposables != null) {
-//            disposables.clear();
-//        }
-//    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.clearDisposables();
+        }
+    }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Movie> list) {
 
@@ -189,10 +145,13 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
 
     @Override
     public void displayError(String message) {
+        //show nice message
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("Error");
-        alertDialogBuilder.setMessage(message);
+        alertDialogBuilder.setMessage("Something went wrong");
         alertDialogBuilder.create().show();
+
+        Timber.d("Error: " + message);
     }
 
 
@@ -229,9 +188,9 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
             holder.mView.setOnClickListener(v -> {
                 //launch details intent
                 Context context = v.getContext();
-                Intent intent = new Intent(context, DetailsActivity.class);
-                intent.putExtra(DetailsActivity.ARG_ITEM_ID, holder.mItem.getImdbID());
-                intent.putExtra(DetailsActivity.ARG_ITEM_TITLE, holder.mItem.getTitle());
+                Intent intent = new Intent(context, MovieDetailsActivity.class);
+                intent.putExtra(MovieDetailsActivity.ARG_ITEM_ID, holder.mItem.getImdbID());
+                intent.putExtra(MovieDetailsActivity.ARG_ITEM_TITLE, holder.mItem.getTitle());
 
                 context.startActivity(intent);
 

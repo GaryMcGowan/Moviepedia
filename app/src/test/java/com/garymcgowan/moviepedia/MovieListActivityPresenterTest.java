@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
@@ -21,6 +22,7 @@ import io.reactivex.Flowable;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -76,7 +78,7 @@ public class MovieListActivityPresenterTest {
 
 
         //then
-        verify(view).displayError();
+        verify(view).displayError(Mockito.anyString());
 
     }
 
@@ -101,7 +103,17 @@ public class MovieListActivityPresenterTest {
 
         presenter.setSearchTermObservable(Flowable.just("123"));
 
+        verify(view).displayError(Mockito.anyString());
+    }
 
-        verify(view).displayError();
+
+    @Test
+    public void multipleRequests() {
+        when(movieRepository.getMovieSearch(Mockito.anyString())).thenReturn(Flowable.just(THREE_MOVIES));
+
+        presenter.setSearchTermObservable(Flowable.just("t", "ta", "tak", "take", "taken"));
+
+
+        verify(view, times(5)).displayMovies(THREE_MOVIES);
     }
 }
