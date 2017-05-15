@@ -53,47 +53,30 @@ public class MovieListActivityPresenterTest {
 
     @Test
     public void shouldPassMoviesToView() {
-        //given
 
-        //when
         when(movieRepository.getMovieSearch("123")).thenReturn(Flowable.just(THREE_MOVIES));
-//        presenter.loadMovies("");
+
         presenter.setSearchTermObservable(Flowable.just("123"));
 
-        //then
         verify(view).displayMovies(THREE_MOVIES);
     }
 
 
     @Test
     public void shouldPassMoviesToViewNull() {
-
-        //given
-        //Flowable<List<Movie>> flowableMovies = null;
-
-        //when
         when(movieRepository.getMovieSearch("123")).thenReturn(null);
-//        presenter.loadMovies("");
+
         presenter.setSearchTermObservable(Flowable.just("123"));
 
-
-        //then
         verify(view).displayError(Mockito.anyString());
-
     }
 
     @Test
     public void shouldPassMoviesToViewEmpty() {
-        //given
-        //Flowable<List<Movie>> flowableMovies = Flowable.just(Collections.EMPTY_LIST);
-
-        //when
         when(movieRepository.getMovieSearch("123")).thenReturn(Flowable.just(Collections.EMPTY_LIST));
+
         presenter.setSearchTermObservable(Flowable.just("123"));
 
-//        presenter.loadMovies("");
-
-        //then
         verify(view).displayMovies(Collections.EMPTY_LIST);
     }
 
@@ -112,7 +95,6 @@ public class MovieListActivityPresenterTest {
         when(movieRepository.getMovieSearch(Mockito.anyString())).thenReturn(Flowable.just(THREE_MOVIES));
 
         presenter.setSearchTermObservable(Flowable.just("t", "ta", "tak", "take", "taken"));
-
 
         verify(view, times(5)).displayMovies(THREE_MOVIES);
     }
