@@ -81,6 +81,4 @@ public class NetworkModule {
                 .listener((picasso, uri, e) -> Log.e("Twitter", e + " Failed to load image: " + uri))
                 .build();
     }
-
-
 }

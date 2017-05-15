@@ -7,6 +7,8 @@ import com.garymcgowan.moviepedia.dagger.ApplicationModule;
 import com.garymcgowan.moviepedia.dagger.DaggerApplicationComponent;
 import com.garymcgowan.moviepedia.dagger.NetworkModule;
 
+import timber.log.Timber;
+
 public class App extends Application {
 
     public static final String mBaseUrl = "http://www.omdbapi.com";
@@ -30,6 +32,10 @@ public class App extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
         component.inject(this);
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
 
     }
 

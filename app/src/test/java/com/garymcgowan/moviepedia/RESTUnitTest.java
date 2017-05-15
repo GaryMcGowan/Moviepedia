@@ -14,7 +14,7 @@ import java.util.List;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static junit.framework.Assert.assertEquals;
@@ -50,7 +50,7 @@ public class RESTUnitTest {
                 .client(client)
                 .baseUrl(mBaseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
         moviesAPI = retrofit.create(MoviesAPI.class);
@@ -59,7 +59,8 @@ public class RESTUnitTest {
     @Test
     public void movieTitles() throws Exception {
         String testMovieName = "taken";
-        List<Movie> movies = moviesAPI.getObservableMoviesSearch(testMovieName, null, null, null, null, null, null).toBlocking().first().search;
+        List<Movie> movies = moviesAPI.getObservableMoviesSearch(testMovieName, null, null, null, null, null, null)
+                .blockingFirst().search;
         System.out.println("Movies " + movies);
 
         assertNotNull(movies);
@@ -71,7 +72,8 @@ public class RESTUnitTest {
     @Test
     public void movieTitlesFailure() throws Exception {
         String testMovieName = "zzzzzzzzzzzzzzzzzzzzz";
-        Search movies = moviesAPI.getObservableMoviesSearch(testMovieName, null, null, null, null, null, null).toBlocking().first();
+        Search movies = moviesAPI.getObservableMoviesSearch(testMovieName, null, null, null, null, null, null)
+                .blockingFirst();
         System.out.println("Movies " + movies);
 
         assertNotNull(movies);
@@ -81,7 +83,8 @@ public class RESTUnitTest {
     @Test
     public void getMovieSuccess() throws Exception {
         String id = "tt0936501";
-        Movie movie = moviesAPI.getObservableMovie(id, null, null, null, null, null, null, null, null).toBlocking().first();
+        Movie movie = moviesAPI.getObservableMovie(id, null, null, null, null, null, null, null, null)
+                .blockingGet();
         System.out.println("Movie " + movie);
 
         assertNotNull(movie);
@@ -91,7 +94,8 @@ public class RESTUnitTest {
     @Test
     public void getMovieFailure() throws Exception {
         String id = "ttbadid";
-        Movie movie = moviesAPI.getObservableMovie(id, null, null, null, null, null, null, null, null).toBlocking().first();
+        Movie movie = moviesAPI.getObservableMovie(id, null, null, null, null, null, null, null, null)
+                .blockingGet();
         System.out.println("Movie " + movie.toString());
         assertNull(movie.getImdbID());
     }
