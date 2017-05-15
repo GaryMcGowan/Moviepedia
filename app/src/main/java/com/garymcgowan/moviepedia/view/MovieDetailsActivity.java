@@ -1,6 +1,7 @@
 package com.garymcgowan.moviepedia.view;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.R;
 import com.garymcgowan.moviepedia.model.Movie;
-import com.garymcgowan.moviepedia.network.MoviesAPI;
+import com.garymcgowan.moviepedia.model.OmdbMovieRepository;
 import com.squareup.picasso.Picasso;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;
@@ -21,17 +22,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class DetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity implements MovieDetailsActivityView {
 
     public static final String ARG_ITEM_ID = "imdb_id";
     public static final String ARG_ITEM_TITLE = "movie_title";
 
-    @Inject MoviesAPI moviesAPI;
+    @Inject OmdbMovieRepository movieRepository;
     Movie movie = null;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -46,7 +44,7 @@ public class DetailsActivity extends AppCompatActivity {
     @BindView(R.id.writerTextView) TextView writerTextView;
     @BindView(R.id.awardsTextView) TextView awardsTextView;
 
-    private CompositeDisposable disposables = new CompositeDisposable();
+    MovieDetailsActivityPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +52,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
         App.getApplicationComponent().inject(this);
+
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
@@ -71,6 +70,7 @@ public class DetailsActivity extends AppCompatActivity {
         writerTextView.setText(null);
         awardsTextView.setText(null);
 
+        presenter = new MovieDetailsActivityPresenter(this, movieRepository, AndroidSchedulers.mainThread());
 
         String imdbId = getIntent().getStringExtra(ARG_ITEM_ID);
         String title = getIntent().getStringExtra(ARG_ITEM_TITLE);
@@ -80,28 +80,17 @@ public class DetailsActivity extends AppCompatActivity {
         }
 
         if (imdbId != null) {
-            disposables.add(moviesAPI.getObservableMovie(imdbId, null, null, null, null, null, null, null, null)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableSingleObserver<Movie>() {
-                        @Override
-                        public void onSuccess(@NonNull Movie movie) {
-                            Timber.d("onSuccess " + movie.toString());
-                            setMovie(movie);
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-                            Timber.d("onError: " + e.getLocalizedMessage());
-                        }
-                    }));
+            presenter.loadMovieDetails(imdbId);
         }
     }
 
-    public void setMovie(Movie movie) {
+    public void setMovie(@NonNull Movie movie) {
         this.movie = movie;
 
         assert movie != null;
+        if (movie == null) {
+            return;
+        }
 
         if (posterImageView != null)
             Picasso.with(getApplicationContext())
@@ -142,8 +131,24 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (disposables != null) {
-            disposables.clear();
+        if (presenter != null) {
+            presenter.clearDisposables();
         }
+    }
+
+    @Override
+    public void displayMovieDetails(Movie movieDetails) {
+        setMovie(movieDetails);
+    }
+
+    @Override
+    public void displayError(String message) {
+        //show nice message
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("Error");
+        alertDialogBuilder.setMessage("Something went wrong");
+        alertDialogBuilder.create().show();
+
+        Timber.d("Error: " + message);
     }
 }
