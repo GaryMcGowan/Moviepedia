@@ -5,6 +5,7 @@ import com.garymcgowan.moviepedia.model.MovieRepository;
 import com.garymcgowan.moviepedia.view.MovieListActivityPresenter;
 import com.garymcgowan.moviepedia.view.MovieListActivityView;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,6 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import io.reactivex.plugins.RxJavaPlugins;
+import io.reactivex.schedulers.Schedulers;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,23 +35,31 @@ public class MovieListActivityPresenterTest {
     @Mock MovieRepository movieRepository;
     MovieListActivityPresenter presenter;
 
+    private final List<Movie> THREE_MOVIES = Arrays.asList(new Movie(), new Movie(), new Movie());
+
 
     @Before
     public void setUp() {
-        presenter = new MovieListActivityPresenter(view, movieRepository);
+        presenter = new MovieListActivityPresenter(view, movieRepository, Schedulers.trampoline());
+        RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
+    }
+
+    @After
+    public void cleanUp() {
+        RxJavaPlugins.reset();
     }
 
     @Test
     public void shouldPassMoviesToView() {
         //given
-        Flowable<List<Movie>> flowableMovies = Flowable.just(Arrays.asList(new Movie(), new Movie(), new Movie()));
 
         //when
-        when(movieRepository.getMovieSearch("")).thenReturn(flowableMovies);
-        presenter.loadMovies("");
+        when(movieRepository.getMovieSearch("123")).thenReturn(Flowable.just(THREE_MOVIES));
+//        presenter.loadMovies("");
+        presenter.setSearchTermObservable(Flowable.just("123"));
 
         //then
-        verify(view).displayMovies(flowableMovies);
+        verify(view).displayMovies(THREE_MOVIES);
     }
 
 
@@ -56,35 +67,40 @@ public class MovieListActivityPresenterTest {
     public void shouldPassMoviesToViewNull() {
 
         //given
-        Flowable<List<Movie>> flowableMovies = null;
+        //Flowable<List<Movie>> flowableMovies = null;
 
         //when
-        when(movieRepository.getMovieSearch("")).thenReturn(flowableMovies);
-        presenter.loadMovies("");
+        when(movieRepository.getMovieSearch("123")).thenReturn(null);
+//        presenter.loadMovies("");
+        presenter.setSearchTermObservable(Flowable.just("123"));
+
 
         //then
-        verify(view).displayMovies(flowableMovies);
+        verify(view).displayError();
 
     }
 
     @Test
     public void shouldPassMoviesToViewEmpty() {
         //given
-        Flowable<List<Movie>> flowableMovies = Flowable.just(Collections.EMPTY_LIST);
+        //Flowable<List<Movie>> flowableMovies = Flowable.just(Collections.EMPTY_LIST);
 
         //when
-        when(movieRepository.getMovieSearch("")).thenReturn(flowableMovies);
-        presenter.loadMovies("");
+        when(movieRepository.getMovieSearch("123")).thenReturn(Flowable.just(Collections.EMPTY_LIST));
+        presenter.setSearchTermObservable(Flowable.just("123"));
+
+//        presenter.loadMovies("");
 
         //then
-        verify(view).displayMovies(flowableMovies);
+        verify(view).displayMovies(Collections.EMPTY_LIST);
     }
 
     @Test
     public void shouldHandleException() {
-        when(movieRepository.getMovieSearch("")).thenThrow(new RuntimeException("Something when wrong"));
+        when(movieRepository.getMovieSearch("123")).thenThrow(new RuntimeException("Something when wrong"));
 
-        presenter.loadMovies("");
+        presenter.setSearchTermObservable(Flowable.just("123"));
+
 
         verify(view).displayError();
     }

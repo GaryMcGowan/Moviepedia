@@ -1,11 +1,8 @@
 package com.garymcgowan.moviepedia.model;
 
-import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.network.MoviesAPI;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
@@ -15,10 +12,10 @@ import io.reactivex.Flowable;
 
 public class OmdbMovieRepository implements MovieRepository {
 
-    @Inject MoviesAPI moviesAPI;
+    MoviesAPI moviesAPI;
 
-    public OmdbMovieRepository() {
-        App.getApplicationComponent().inject(this);
+    public OmdbMovieRepository(MoviesAPI moviesAPI) {
+        this.moviesAPI = moviesAPI;
     }
 
     @Override
