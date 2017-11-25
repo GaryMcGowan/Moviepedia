@@ -1,6 +1,7 @@
 package com.garymcgowan.moviepedia.dagger;
 
 import android.app.Application;
+import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.garymcgowan.moviepedia.network.MoviesAPI;
@@ -26,27 +27,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class NetworkModule {
 
-    String mBaseUrl;
+    String baseUrl;
 
     public NetworkModule(String baseUrl) {
-        mBaseUrl = baseUrl;
+        this.baseUrl = baseUrl;
     }
 
+    @VisibleForTesting
     @Provides
     @Singleton
-    Gson provideGson() {
-
+    public Gson provideGson() {
         return new GsonBuilder()
-                //.registerTypeAdapterFactory(new SafeListAdapter())
-                //.registerTypeAdapterFactory(new SafeMapAdapter())
-                //.registerTypeAdapter(BindingValues.class, new BindingValuesAdapter())
                 .create();
     }
 
 
+    @VisibleForTesting
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient() {
+    public OkHttpClient provideOkHttpClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
@@ -54,28 +53,31 @@ public class NetworkModule {
     }
 
 
+    @VisibleForTesting
     @Provides
     @Singleton
-    Retrofit provideRetrofit(OkHttpClient client, Gson gson) {
+    public Retrofit provideRetrofit(OkHttpClient client, Gson gson) {
         return new Retrofit.Builder()
                 .client(client)
-                .baseUrl(mBaseUrl)
+                .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
 
+    @VisibleForTesting
     @Provides
     @Singleton
-    MoviesAPI provideObservableMoviesApi(Retrofit retrofit) {
+    public MoviesAPI provideObservableMoviesApi(Retrofit retrofit) {
         return retrofit.create(MoviesAPI.class);
 
     }
 
 
+    @VisibleForTesting
     @Provides
     @Singleton
-    Picasso providePicasso(Application app, OkHttpClient client) {
+    public Picasso providePicasso(Application app, OkHttpClient client) {
         return new Picasso.Builder(app)
                 .downloader(new OkHttp3Downloader(client))
                 .listener((picasso, uri, e) -> Log.e("Twitter", e + " Failed to load image: " + uri))

@@ -7,7 +7,6 @@ import com.garymcgowan.moviepedia.view.MovieListActivity;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import okhttp3.OkHttpClient;
 
 /**
  * Created by Gary on 2016/11/02.
@@ -23,5 +22,4 @@ public interface ApplicationComponent {
     void inject(MovieListActivity activity);
 
 
-    OkHttpClient getOkHttpClient();
 }

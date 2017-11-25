@@ -17,6 +17,8 @@ import retrofit2.http.Query;
  */
 public interface MoviesAPI {
 
+    String API_KEY = "955c021d"; // TODO this can be extracted to gradle property
+
     String TYPE_MOVIE = "movie";
     String TYPE_SERIES = "series";
     String TYPE_EPISODE = "episode";
@@ -30,24 +32,26 @@ public interface MoviesAPI {
     String TRUE = "true";
     String FALSE = "false";
 
-    @GET("/")
-    Flowable<Search> getObservableMoviesSearch(@Query("s") String search,
-                                               @Query("type") String type,// movie, series, episode
-                                               @Query("y") Integer year,
-                                               @Query("r") Boolean responseType,//json, xml
-                                               @Query("page") Integer page,
-                                               @Query("callback") String callback,
-                                               @Query("v") Integer apiVersion);
+    @GET("/?apikey=" + API_KEY)
+    Flowable<Search> getObservableMoviesSearch(
+            @Query("s") String search,
+            @Query("type") String type,// movie, series, episode
+            @Query("y") Integer year,
+            @Query("r") Boolean responseType,//json, xml
+            @Query("page") Integer page,
+            @Query("callback") String callback,
+            @Query("v") Integer apiVersion);
 
-    @GET("/")
-    Single<Movie> getObservableMovie(@Query("i") String id,
-                                     @Query("t") String title,
-                                     @Query("type") String type,// movie, series, episode
-                                     @Query("y") Integer year,
-                                     @Query("plot") String plotLength,//short, full
-                                     @Query("r") Boolean responseType,//json, xml
-                                     @Query("tomatoes") Boolean tomatoes,
-                                     @Query("callback") String callback,
-                                     @Query("v") Integer apiVersion);
+    @GET("/?apikey=" + API_KEY)
+    Single<Movie> getObservableMovie(
+            @Query("i") String id,
+            @Query("t") String title,
+            @Query("type") String type,// movie, series, episode
+            @Query("y") Integer year,
+            @Query("plot") String plotLength,//short, full
+            @Query("r") Boolean responseType,//json, xml
+            @Query("tomatoes") Boolean tomatoes,
+            @Query("callback") String callback,
+            @Query("v") Integer apiVersion);
 
 }
