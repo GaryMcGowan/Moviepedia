@@ -2,8 +2,8 @@ package com.garymcgowan.moviepedia;
 
 import com.garymcgowan.moviepedia.dagger.NetworkModule;
 import com.garymcgowan.moviepedia.model.Movie;
-import com.garymcgowan.moviepedia.model.Search;
-import com.garymcgowan.moviepedia.network.MoviesAPI;
+import com.garymcgowan.moviepedia.network.OmdbMoviesAPI;
+import com.garymcgowan.moviepedia.network.OmdbSearch;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class RESTUnitTest {
 
     private static final String mBaseUrl = "http://www.omdbapi.com";
 
-    static MoviesAPI api;
+    static OmdbMoviesAPI api;
 
     @BeforeClass
     public static void setUp() {
@@ -56,7 +56,7 @@ public class RESTUnitTest {
     @Test
     public void movieTitlesFailure() throws Exception {
         String testMovieName = "zzzzzzzzzzzzzzzzzzzzz";
-        Search movies = api.getObservableMoviesSearch(testMovieName, null, null, null, null, null, null)
+        OmdbSearch movies = api.getObservableMoviesSearch(testMovieName, null, null, null, null, null, null)
                 .blockingFirst();
         System.out.println("Movies " + movies);
 

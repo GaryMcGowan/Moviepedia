@@ -1,12 +1,13 @@
 package com.garymcgowan.moviepedia.model;
 
+import com.garymcgowan.moviepedia.network.OmdbBaseResponse;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by Gary on 2016/10/26.
  */
 
-public class Movie extends BaseOMDBResponse {
+public class Movie extends OmdbBaseResponse {
     //Summary fields (returned by search)
     @SerializedName("Title") String title;
     @SerializedName("Year") String year;

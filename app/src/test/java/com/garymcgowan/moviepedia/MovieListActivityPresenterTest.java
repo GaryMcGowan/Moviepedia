@@ -2,8 +2,8 @@ package com.garymcgowan.moviepedia;
 
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.model.MovieRepository;
-import com.garymcgowan.moviepedia.view.MovieListActivityPresenter;
-import com.garymcgowan.moviepedia.view.MovieListActivityView;
+import com.garymcgowan.moviepedia.view.search.MovieListActivityPresenter;
+import com.garymcgowan.moviepedia.view.search.MovieListActivityView;
 
 import org.junit.After;
 import org.junit.Before;

@@ -13,6 +13,7 @@
     <color name="colorControlActivated">@color/colorAccent</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+    <color name="bg_grey">#ededed</color>
 
     <!--IMAGE PLACEHOLDER COLOUR FOR IMAGE LOADING-->
     <color name="imagePlaceholder">#CCCCCC</color>

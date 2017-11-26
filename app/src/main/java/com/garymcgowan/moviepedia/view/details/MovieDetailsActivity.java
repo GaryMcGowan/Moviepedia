@@ -1,4 +1,4 @@
-package com.garymcgowan.moviepedia.view;
+package com.garymcgowan.moviepedia.view.details;
 
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.R;
 import com.garymcgowan.moviepedia.model.Movie;
-import com.garymcgowan.moviepedia.model.OmdbMovieRepository;
+import com.garymcgowan.moviepedia.network.OmdbMovieRepository;
 import com.squareup.picasso.Picasso;
 
 import net.opacapp.multilinecollapsingtoolbar.CollapsingToolbarLayout;

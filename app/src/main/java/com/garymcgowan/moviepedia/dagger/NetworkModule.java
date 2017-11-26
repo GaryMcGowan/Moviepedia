@@ -4,7 +4,7 @@ import android.app.Application;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
-import com.garymcgowan.moviepedia.network.MoviesAPI;
+import com.garymcgowan.moviepedia.network.OmdbMoviesAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.picasso.OkHttp3Downloader;
@@ -68,8 +68,8 @@ public class NetworkModule {
     @VisibleForTesting
     @Provides
     @Singleton
-    public MoviesAPI provideObservableMoviesApi(Retrofit retrofit) {
-        return retrofit.create(MoviesAPI.class);
+    public OmdbMoviesAPI provideObservableMoviesApi(Retrofit retrofit) {
+        return retrofit.create(OmdbMoviesAPI.class);
 
     }
 

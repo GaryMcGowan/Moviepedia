@@ -1,7 +1,8 @@
-package com.garymcgowan.moviepedia.view;
+package com.garymcgowan.moviepedia.view.search;
 
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.model.MovieRepository;
+import com.garymcgowan.moviepedia.view.BasePresenter;
 
 import java.util.List;
 

@@ -1,7 +1,6 @@
 package com.garymcgowan.moviepedia.network;
 
 import com.garymcgowan.moviepedia.model.Movie;
-import com.garymcgowan.moviepedia.model.Search;
 
 import io.reactivex.Flowable;
 import io.reactivex.Single;
@@ -15,7 +14,7 @@ import retrofit2.http.Query;
 /**
  * api: http://www.omdbapi.com/
  */
-public interface MoviesAPI {
+public interface OmdbMoviesAPI {
 
     String API_KEY = "955c021d"; // TODO this can be extracted to gradle property
 
@@ -33,7 +32,7 @@ public interface MoviesAPI {
     String FALSE = "false";
 
     @GET("/?apikey=" + API_KEY)
-    Flowable<Search> getObservableMoviesSearch(
+    Flowable<OmdbSearch> getObservableMoviesSearch(
             @Query("s") String search,
             @Query("type") String type,// movie, series, episode
             @Query("y") Integer year,

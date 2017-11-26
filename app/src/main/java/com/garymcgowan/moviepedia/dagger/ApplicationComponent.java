@@ -1,8 +1,8 @@
 package com.garymcgowan.moviepedia.dagger;
 
 import com.garymcgowan.moviepedia.App;
-import com.garymcgowan.moviepedia.view.MovieDetailsActivity;
-import com.garymcgowan.moviepedia.view.MovieListActivity;
+import com.garymcgowan.moviepedia.view.details.MovieDetailsActivity;
+import com.garymcgowan.moviepedia.view.search.MovieListActivity;
 
 import javax.inject.Singleton;
 

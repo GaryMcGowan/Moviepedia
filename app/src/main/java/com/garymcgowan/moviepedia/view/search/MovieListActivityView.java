@@ -1,4 +1,4 @@
-package com.garymcgowan.moviepedia.view;
+package com.garymcgowan.moviepedia.view.search;
 
 import com.garymcgowan.moviepedia.model.Movie;
 

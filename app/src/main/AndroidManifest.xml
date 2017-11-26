@@ -23,12 +23,12 @@
         </activity>
 
         <activity
-            android:name="com.garymcgowan.moviepedia.view.MovieListActivity"
+            android:name="com.garymcgowan.moviepedia.view.search.MovieListActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
-            android:name="com.garymcgowan.moviepedia.view.MovieDetailsActivity"
+            android:name="com.garymcgowan.moviepedia.view.details.MovieDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize" />
     </application>

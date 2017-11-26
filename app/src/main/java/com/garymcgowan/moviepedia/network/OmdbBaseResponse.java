@@ -1,4 +1,4 @@
-package com.garymcgowan.moviepedia.model;
+package com.garymcgowan.moviepedia.network;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by Gary on 2016/10/27.
  */
 
-public class BaseOMDBResponse {
+public class OmdbBaseResponse {
 
     //error fields
 //    {

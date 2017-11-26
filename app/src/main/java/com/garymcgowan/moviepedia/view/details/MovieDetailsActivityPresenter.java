@@ -1,7 +1,8 @@
-package com.garymcgowan.moviepedia.view;
+package com.garymcgowan.moviepedia.view.details;
 
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.model.MovieRepository;
+import com.garymcgowan.moviepedia.view.BasePresenter;
 
 import io.reactivex.Scheduler;
 import io.reactivex.annotations.NonNull;

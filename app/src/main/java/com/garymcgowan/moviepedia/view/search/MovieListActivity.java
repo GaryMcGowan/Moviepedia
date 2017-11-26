@@ -1,4 +1,4 @@
-package com.garymcgowan.moviepedia.view;
+package com.garymcgowan.moviepedia.view.search;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -23,7 +23,8 @@ import android.widget.TextView;
 import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.R;
 import com.garymcgowan.moviepedia.model.Movie;
-import com.garymcgowan.moviepedia.model.OmdbMovieRepository;
+import com.garymcgowan.moviepedia.network.OmdbMovieRepository;
+import com.garymcgowan.moviepedia.view.details.MovieDetailsActivity;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 import com.squareup.picasso.Picasso;
 
@@ -134,7 +135,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
             emptyTextView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
 
-            recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(list));
+            recyclerView.setAdapter(new MovieListAdapter(list));
         }
     }
 

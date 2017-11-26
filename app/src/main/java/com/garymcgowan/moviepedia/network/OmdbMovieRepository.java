@@ -1,6 +1,7 @@
-package com.garymcgowan.moviepedia.model;
+package com.garymcgowan.moviepedia.network;
 
-import com.garymcgowan.moviepedia.network.MoviesAPI;
+import com.garymcgowan.moviepedia.model.Movie;
+import com.garymcgowan.moviepedia.model.MovieRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,10 +19,10 @@ import io.reactivex.Single;
 @Singleton
 public class OmdbMovieRepository implements MovieRepository {
 
-    MoviesAPI moviesAPI;
+    OmdbMoviesAPI moviesAPI;
 
     @Inject
-    public OmdbMovieRepository(MoviesAPI moviesAPI) {
+    public OmdbMovieRepository(OmdbMoviesAPI moviesAPI) {
         this.moviesAPI = moviesAPI;
     }
 
@@ -45,7 +46,7 @@ public class OmdbMovieRepository implements MovieRepository {
                     if (movie.isResponse()) {
                         return movie;
                     } else {
-                        throw new Exception(movie.error);
+                        throw new Exception(movie.getError());
                     }
                 });
     }

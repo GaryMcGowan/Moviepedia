@@ -12,11 +12,11 @@ public class BasePresenter {
     private CompositeDisposable disposables = new CompositeDisposable();
 
 
-    protected void addDisposable(Disposable disposable) {
+    public void addDisposable(Disposable disposable) {
         disposables.add(disposable);
     }
 
-    protected void clearDisposables() {
+    public void clearDisposables() {
         disposables.clear();
     }
 }
