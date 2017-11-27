@@ -30,6 +30,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
     public static final String ARG_ITEM_TITLE = "movie_title";
 
     @Inject OmdbMovieRepository movieRepository;
+    @Inject Picasso picasso;
     Movie movie = null;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -93,8 +94,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MovieDeta
         }
 
         if (posterImageView != null)
-            Picasso.with(getApplicationContext())
-                    .load(movie.getPosterURL())
+            picasso.load(movie.getPosterURL())
                     .placeholder(R.color.imagePlaceholder)
                     .error(R.color.imagePlaceholder)
                     .into(posterImageView);

@@ -36,7 +36,7 @@ public interface OmdbMoviesAPI {
             @Query("s") String search,
             @Query("type") String type,// movie, series, episode
             @Query("y") Integer year,
-            @Query("r") Boolean responseType,//json, xml
+            @Query("r") String responseType,//json, xml
             @Query("page") Integer page,
             @Query("callback") String callback,
             @Query("v") Integer apiVersion);
@@ -48,7 +48,7 @@ public interface OmdbMoviesAPI {
             @Query("type") String type,// movie, series, episode
             @Query("y") Integer year,
             @Query("plot") String plotLength,//short, full
-            @Query("r") Boolean responseType,//json, xml
+            @Query("r") String responseType,//json, xml
             @Query("tomatoes") Boolean tomatoes,
             @Query("callback") String callback,
             @Query("v") Integer apiVersion);

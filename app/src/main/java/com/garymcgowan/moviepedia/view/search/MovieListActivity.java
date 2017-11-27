@@ -2,7 +2,6 @@ package com.garymcgowan.moviepedia.view.search;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,22 +10,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.R;
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.network.OmdbMovieRepository;
-import com.garymcgowan.moviepedia.view.details.MovieDetailsActivity;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -116,25 +110,22 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView, List<Movie> list) {
 
-        if (list == null) // null for first time setup
-        {
+        // null for first time setup
+        if (list == null) {
             emptyTextView.setText(R.string.empty_text_first_time);
-
             emptyTextView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
-        } else if (list.size() == 0) // empty list means no results
-        {
+        }
+        // empty list means no results
+        else if (list.size() == 0) {
             emptyTextView.setText(R.string.empty_text);
-
             emptyTextView.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
-        } else {
-
-            // finally, we have some movies
-
+        }
+        // finally, we have some movies
+        else {
             emptyTextView.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-
             recyclerView.setAdapter(new MovieListAdapter(list));
         }
     }
@@ -153,76 +144,5 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
         alertDialogBuilder.create().show();
 
         Timber.d("Error: " + message);
-    }
-
-
-    class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
-
-        private final List<Movie> mValues;
-
-        SimpleItemRecyclerViewAdapter(List<Movie> items) {
-            mValues = items;
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.list_item, parent, false);
-            return new ViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-
-            //set movie title
-            holder.titleTextView.setText(holder.mItem.getTitleYear());
-
-            //load image with Picasso
-            Picasso.with(getApplicationContext())
-                    .load(holder.mItem.getPosterURL())
-                    .placeholder(R.color.imagePlaceholder)
-                    .error(R.color.imagePlaceholder)
-                    .into(holder.posterImageView);
-
-            holder.mView.setOnClickListener(v -> {
-                //launch details intent
-                Context context = v.getContext();
-                Intent intent = new Intent(context, MovieDetailsActivity.class);
-                intent.putExtra(MovieDetailsActivity.ARG_ITEM_ID, holder.mItem.getImdbID());
-                intent.putExtra(MovieDetailsActivity.ARG_ITEM_TITLE, holder.mItem.getTitle());
-
-                context.startActivity(intent);
-
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            if (mValues == null)
-                return 0;
-            return mValues.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-            final View mView;
-            Movie mItem;
-
-            @BindView(R.id.titleTextView) TextView titleTextView;
-            @BindView(R.id.posterImageView) ImageView posterImageView;
-
-
-            ViewHolder(View view) {
-                super(view);
-                ButterKnife.bind(this, view);
-                mView = view;
-            }
-
-            @Override
-            public String toString() {
-                return super.toString() + " '" + titleTextView.getText() + "'";
-            }
-        }
     }
 }

@@ -29,7 +29,7 @@ public class OmdbMovieRepository implements MovieRepository {
     @Override
     public Flowable<List<Movie>> getMovieSearch(String search) {
         return moviesAPI.getObservableMoviesSearch(search,
-                null, null, null, null, null,
+                null, null, OmdbMoviesAPI.RESPONSE_JSON, null, null,
                 null)
                 .map(searchObject -> {
                     if (searchObject == null || searchObject.search == null || !searchObject.isResponse()) {
@@ -41,7 +41,7 @@ public class OmdbMovieRepository implements MovieRepository {
 
     @Override
     public Single<Movie> getMovieDetails(String movieId) {
-        return moviesAPI.getObservableMovie(movieId, null, null, null, null, null, null, null, null)
+        return moviesAPI.getObservableMovie(movieId, null, null, null, OmdbMoviesAPI.PLOT_FULL, OmdbMoviesAPI.RESPONSE_JSON, null, null, null)
                 .map(movie -> {
                     if (movie.isResponse()) {
                         return movie;
