@@ -10,7 +10,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        jackOptions.enabled true
     }
     buildTypes {
         release {
@@ -33,6 +32,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.0.1'
     compile 'com.android.support:design:27.0.1'
     compile 'com.android.support:cardview-v7:27.0.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     //multiline collapsing toolbar
     compile 'net.opacapp:multiline-collapsingtoolbar:1.3.0'
@@ -84,7 +84,6 @@ dependencies {
 
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-//    compile 'com.squareup.retrofit2:adapter-rxjava2:latest.version'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     //compile 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
     compile 'com.squareup.okhttp3:okhttp:3.8.0'
@@ -96,6 +95,4 @@ dependencies {
     //Needed for managing image loading and for easy caching
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
-
-
 }
