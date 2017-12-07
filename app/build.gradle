@@ -37,6 +37,8 @@ dependencies {
     //multiline collapsing toolbar
     compile 'net.opacapp:multiline-collapsingtoolbar:1.3.0'
 
+    compile 'com.github.ivbaranov:materialfavoritebutton:0.1.4'
+
     // ********************
     // ***** TESTING ******
     // ********************

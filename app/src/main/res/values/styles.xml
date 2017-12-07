@@ -16,7 +16,7 @@
 
 
     <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/background</item>
+        <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

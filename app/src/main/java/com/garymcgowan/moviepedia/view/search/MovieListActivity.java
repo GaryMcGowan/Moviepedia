@@ -20,6 +20,7 @@ import com.garymcgowan.moviepedia.App;
 import com.garymcgowan.moviepedia.R;
 import com.garymcgowan.moviepedia.model.Movie;
 import com.garymcgowan.moviepedia.network.OmdbMovieRepository;
+import com.garymcgowan.moviepedia.widget.VariableColumnGridLayoutManager;
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView;
 
 import java.util.List;
@@ -56,6 +57,7 @@ public class MovieListActivity extends AppCompatActivity implements MovieListAct
         assert recyclerView != null;
 
 
+        recyclerView.setLayoutManager(new VariableColumnGridLayoutManager(this, R.dimen.list_item_width));
         setupRecyclerView(recyclerView, null);
 
         presenter = new MovieListActivityPresenter(this, movieRepository, AndroidSchedulers.mainThread());

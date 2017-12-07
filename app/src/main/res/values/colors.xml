@@ -14,6 +14,7 @@
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="bg_grey">#ededed</color>
+    <color name="bg_transparent_black">#66000000</color>
 
     <!--IMAGE PLACEHOLDER COLOUR FOR IMAGE LOADING-->
     <color name="imagePlaceholder">#CCCCCC</color>
