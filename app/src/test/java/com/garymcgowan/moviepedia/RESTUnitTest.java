@@ -44,7 +44,7 @@ public class RESTUnitTest {
     public void movieTitles() throws Exception {
         String testMovieName = "taken";
         List<Movie> movies = api.getObservableMoviesSearch(testMovieName, null, null, null, null, null, null)
-                .blockingFirst().search;
+                .blockingFirst().getSearch();
         System.out.println("Movies " + movies);
 
         assertNotNull(movies);
@@ -61,7 +61,7 @@ public class RESTUnitTest {
         System.out.println("Movies " + movies);
 
         assertNotNull(movies);
-        assertNull(movies.search);
+        assertNull(movies.getSearch());
     }
 
     @Test

@@ -19,10 +19,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by garymcgowan on 25/11/2017.
- */
-
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
 
     private final List<Movie> movieList;
