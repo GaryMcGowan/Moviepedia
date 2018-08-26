@@ -17,7 +17,7 @@ interface OmdbMoviesAPI {
             @Query("s") search: String,
             @Query("type") type: String?, // movie, series, episode
             @Query("y") year: Int?,
-            @Query("r") responseType: String, //json, xml
+            @Query("r") responseType: String?, //json, xml
             @Query("page") page: Int?,
             @Query("callback") callback: String?,
             @Query("v") apiVersion: Int?): Flowable<OmdbSearch>
@@ -28,8 +28,8 @@ interface OmdbMoviesAPI {
             @Query("t") title: String?,
             @Query("type") type: String?, // movie, series, episode
             @Query("y") year: Int?,
-            @Query("plot") plotLength: String, //short, full
-            @Query("r") responseType: String, //json, xml
+            @Query("plot") plotLength: String?, //short, full
+            @Query("r") responseType: String?, //json, xml
             @Query("tomatoes") tomatoes: Boolean?,
             @Query("callback") callback: String?,
             @Query("v") apiVersion: Int?): Single<Movie>
