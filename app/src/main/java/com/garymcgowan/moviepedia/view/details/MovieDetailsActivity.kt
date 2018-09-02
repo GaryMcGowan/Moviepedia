@@ -3,6 +3,7 @@ package com.garymcgowan.moviepedia.view.details
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.garymcgowan.moviepedia.App
 import com.garymcgowan.moviepedia.R
@@ -55,7 +56,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsActivityContract.V
         val title = intent.getStringExtra(ARG_ITEM_TITLE)
 
         if (title != null) {
-            toolbar_layout.setTitle(title)
+            (toolbar_layout as? Toolbar)?.title = title
         }
 
         if (imdbId != null) {
@@ -72,7 +73,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsActivityContract.V
         }
 
         if (posterImageView != null)
-            picasso?.apply {
+            picasso.apply {
                 load(movie.posterURL)
                         .placeholder(R.color.imagePlaceholder)
                         .error(R.color.imagePlaceholder)
@@ -80,7 +81,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsActivityContract.V
             }
 
         if (toolbar != null) {
-            toolbar_layout.setTitle(movie.titleYear)
+            (toolbar_layout as? Toolbar)?.title = movie.titleYear
         }
 
         if (plotTextView != null) {

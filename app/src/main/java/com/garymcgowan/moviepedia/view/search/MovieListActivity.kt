@@ -14,6 +14,7 @@ import com.garymcgowan.moviepedia.R
 import com.garymcgowan.moviepedia.model.Movie
 import com.garymcgowan.moviepedia.network.OmdbMovieRepository
 import com.garymcgowan.moviepedia.widget.VariableColumnGridLayoutManager
+import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_list.*
