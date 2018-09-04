@@ -2,7 +2,7 @@ package com.garymcgowan.moviepedia.network
 
 import com.google.gson.annotations.SerializedName
 
-open class OmdbBaseResponse {
+abstract class OmdbBaseResponse {
 
     //error fields
     //    {

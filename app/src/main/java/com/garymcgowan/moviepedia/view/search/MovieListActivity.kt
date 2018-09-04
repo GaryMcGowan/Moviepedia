@@ -13,6 +13,7 @@ import com.garymcgowan.moviepedia.App
 import com.garymcgowan.moviepedia.R
 import com.garymcgowan.moviepedia.model.Movie
 import com.garymcgowan.moviepedia.network.OmdbMovieRepository
+import com.garymcgowan.moviepedia.persistence.StoredMovieDao
 import com.garymcgowan.moviepedia.widget.VariableColumnGridLayoutManager
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import io.reactivex.BackpressureStrategy
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class MovieListActivity : AppCompatActivity(), MovieListActivityContract.View {
 
     @Inject lateinit var movieRepository: OmdbMovieRepository
+    @Inject lateinit var storedMovieDao: StoredMovieDao
 
     internal var presenter: MovieListActivityPresenter? = null
     internal var searchView: SearchView? = null
@@ -41,7 +43,7 @@ class MovieListActivity : AppCompatActivity(), MovieListActivityContract.View {
         recyclerView.layoutManager = VariableColumnGridLayoutManager(this, R.dimen.list_item_width)
         setupRecyclerView(recyclerView, null)
 
-        presenter = MovieListActivityPresenter(this, movieRepository, AndroidSchedulers.mainThread())
+        presenter = MovieListActivityPresenter(this, movieRepository, storedMovieDao, AndroidSchedulers.mainThread())
 
         searchView?.let { searchView ->
             presenter?.setSearchTermObservable(RxSearchView.queryTextChanges(searchView).toFlowable(BackpressureStrategy.LATEST).map { it.toString() })
@@ -97,7 +99,7 @@ class MovieListActivity : AppCompatActivity(), MovieListActivityContract.View {
             else -> {
                 emptyTextView.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
-                recyclerView.adapter = MovieListAdapter(list)
+                recyclerView.adapter = MovieListAdapter(list) { presenter?.favouriteClicked(it, true) }
             }
         }
     }

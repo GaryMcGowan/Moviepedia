@@ -2,6 +2,7 @@ package com.garymcgowan.moviepedia
 
 import com.garymcgowan.moviepedia.model.Movie
 import com.garymcgowan.moviepedia.model.MovieRepository
+import com.garymcgowan.moviepedia.persistence.StoredMovieDao
 import com.garymcgowan.moviepedia.view.search.MovieListActivityContract
 import com.garymcgowan.moviepedia.view.search.MovieListActivityPresenter
 import io.reactivex.Flowable
@@ -22,6 +23,7 @@ class MovieListActivityPresenterTest {
 
     @Mock lateinit var view: MovieListActivityContract.View
     @Mock lateinit var movieRepository: MovieRepository
+    @Mock lateinit var storedMovieDao: StoredMovieDao
     lateinit var presenter: MovieListActivityPresenter
 
     private val THREE_MOVIES = Arrays.asList(Movie(), Movie(), Movie())
@@ -30,7 +32,7 @@ class MovieListActivityPresenterTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = MovieListActivityPresenter(view, movieRepository, Schedulers.trampoline())
+        presenter = MovieListActivityPresenter(view, movieRepository, storedMovieDao, Schedulers.trampoline())
         RxJavaPlugins.setIoSchedulerHandler { scheduler -> Schedulers.trampoline() }
     }
 

@@ -14,7 +14,8 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class MovieListAdapter(
-        private val movieList: List<Movie>?
+        private val movieList: List<Movie>?,
+        private val favCallback: (Movie) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -52,6 +53,10 @@ class MovieListAdapter(
 
                     context.startActivity(intent)
                 }
+
+                holder.favouriteButton.setOnClickListener {
+                    favCallback.invoke(currentMovie)
+                }
             }
         }
     }
@@ -63,5 +68,6 @@ class MovieListAdapter(
     internal class ViewHolder(val parentView: View) : RecyclerView.ViewHolder(parentView) {
         var titleTextView: TextView = parentView.titleTextView
         var posterImageView: ImageView = parentView.posterImageView
+        var favouriteButton: View = parentView.favourite_button
     }
 }

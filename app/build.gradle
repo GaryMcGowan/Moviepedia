@@ -89,28 +89,39 @@ dependencies {
     kapt 'com.jakewharton:butterknife-compiler:8.8.1'
 
     //dagger
-    kapt "com.google.dagger:dagger-compiler:2.10"
-    implementation 'com.google.dagger:dagger:2.10'
+    kapt "com.google.dagger:dagger-compiler:2.17"
+    implementation 'com.google.dagger:dagger:2.17'
     kapt 'javax.annotation:jsr250-api:1.0'
 
     // ********************
     // ***** NETWORK ******
     // ********************
 
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     //implementation 'com.squareup.okhttp:okhttp-urlconnection:2.5.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
     //JSON - GSON
-    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     //Needed for managing image loading and for easy caching
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // ************************
+    // ***** Persistence ******
+    // ************************
+
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    kapt "android.arch.persistence.room:compiler:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    androidTestImplementation "android.arch.persistence.room:testing:1.1.1"
+    androidTestImplementation "android.arch.core:core-testing:1.1.1"
+
 }
 repositories {
     mavenCentral()
