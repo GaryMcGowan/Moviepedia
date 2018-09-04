@@ -64,8 +64,7 @@ class Movie : OmdbBaseResponse() {
     var imdbVotes: String? = null
 
 
-    val titleYear: String
-        get() = "$title ($year)"
+    fun titleYear() = "$title ($year)"
 
     override fun toString(): String {
         return title ?: ""

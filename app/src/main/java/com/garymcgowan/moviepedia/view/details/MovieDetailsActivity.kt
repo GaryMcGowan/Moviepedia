@@ -81,7 +81,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsActivityContract.V
             }
 
         if (toolbar != null) {
-            (toolbar_layout as? Toolbar)?.title = movie.titleYear
+            (toolbar_layout as? Toolbar)?.title = movie.titleYear()
         }
 
         if (plotTextView != null) {

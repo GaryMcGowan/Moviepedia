@@ -34,7 +34,7 @@ class MovieListAdapter(
         when (holder) {
             is ViewHolder -> {
                 //set movie title
-                holder.titleTextView.text = currentMovie.titleYear
+                holder.titleTextView.text = currentMovie.titleYear()
 
                 //load image with Picasso
                 Picasso.with(holder.parentView.context)
