@@ -33,7 +33,7 @@ class MovieListActivity : AppCompatActivity(), MovieListActivityContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
-        App.getApplicationComponent().inject(this)
+        (application as App).component.inject(this)
 
         setSupportActionBar(toolbar)
         toolbar.title = title

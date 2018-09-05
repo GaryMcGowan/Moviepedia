@@ -33,7 +33,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsActivityContract.V
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
-        App.getApplicationComponent().inject(this)
+        (application as App).component.inject(this)
 
         setSupportActionBar(toolbar)
 
