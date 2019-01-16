@@ -3,8 +3,8 @@ package com.garymcgowan.moviepedia
 import com.garymcgowan.moviepedia.model.Movie
 import com.garymcgowan.moviepedia.model.MovieRepository
 import com.garymcgowan.moviepedia.persistence.StoredMovieDao
-import com.garymcgowan.moviepedia.view.search.MovieListActivityContract
-import com.garymcgowan.moviepedia.view.search.MovieListActivityPresenter
+import com.garymcgowan.moviepedia.view.search.MovieListContract
+import com.garymcgowan.moviepedia.view.search.MovieListPresenter
 import io.reactivex.Flowable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -17,14 +17,14 @@ import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import java.util.*
 
-class MovieListActivityPresenterTest {
+class MovieListPresenterTest {
 
 //    @Rule var mockitoRule = MockitoJUnit.rule()
 
-    @Mock lateinit var view: MovieListActivityContract.View
+    @Mock lateinit var view: MovieListContract.View //TODO take view
     @Mock lateinit var movieRepository: MovieRepository
     @Mock lateinit var storedMovieDao: StoredMovieDao
-    lateinit var presenter: MovieListActivityPresenter
+    lateinit var presenter: MovieListPresenter
 
     private val THREE_MOVIES = Arrays.asList(Movie(), Movie(), Movie())
 
@@ -32,7 +32,7 @@ class MovieListActivityPresenterTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        presenter = MovieListActivityPresenter(view, movieRepository, storedMovieDao, Schedulers.trampoline())
+        presenter = MovieListPresenter(movieRepository, storedMovieDao, Schedulers.trampoline())
         RxJavaPlugins.setIoSchedulerHandler { scheduler -> Schedulers.trampoline() }
     }
 

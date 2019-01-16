@@ -1,6 +1,6 @@
 package com.garymcgowan.moviepedia
 
-import com.garymcgowan.moviepedia.dagger.NetworkModule
+import com.garymcgowan.moviepedia.network.NetworkModule
 import com.garymcgowan.moviepedia.network.OmdbMoviesAPI
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull

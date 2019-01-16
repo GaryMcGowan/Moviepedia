@@ -1,9 +1,9 @@
-package com.garymcgowan.moviepedia.dagger
+package com.garymcgowan.moviepedia.network
 
-import android.app.Application
 import android.support.annotation.VisibleForTesting
 import android.util.Log
-import com.garymcgowan.moviepedia.network.OmdbMoviesAPI
+import com.garymcgowan.moviepedia.App
+import com.garymcgowan.moviepedia.model.MovieRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.jakewharton.picasso.OkHttp3Downloader
@@ -18,7 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class NetworkModule(internal var baseUrl: String) {
+class NetworkModule {
+
+    val baseUrl = "http://www.omdbapi.com"
 
     @VisibleForTesting
     @Provides
@@ -63,10 +65,14 @@ class NetworkModule(internal var baseUrl: String) {
     @VisibleForTesting
     @Provides
     @Singleton
-    fun providePicasso(app: Application, client: OkHttpClient): Picasso {
+    fun providePicasso(app: App, client: OkHttpClient): Picasso {
         return Picasso.Builder(app)
                 .downloader(OkHttp3Downloader(client))
                 .listener { picasso, uri, e -> Log.e("Twitter", e.toString() + " Failed to load image: " + uri) }
                 .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideMovieRepository(repository: OmdbMovieRepository): MovieRepository = repository
 }

@@ -1,26 +1,27 @@
 package com.garymcgowan.moviepedia.dagger
 
-import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
+import com.garymcgowan.moviepedia.App
 import com.garymcgowan.moviepedia.persistence.AppDatabase
 import com.garymcgowan.moviepedia.persistence.StoredMovieDao
+import com.garymcgowan.moviepedia.view.details.MovieDetailsModule
+import com.garymcgowan.moviepedia.view.search.MovieListModule
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Singleton
 
-@Module
-class ApplicationModule(internal var mApplication: Application) {
+@Module(includes = [
+    MovieListModule::class,
+    MovieDetailsModule::class
+])
+class AppModule {
 
     @Provides
     @Singleton
-    internal fun providesApp(): Application {
-        return mApplication
-    }
-
-    @Provides
-    @Singleton
-    internal fun providesAppContext(application: Application): Context {
+    internal fun providesAppContext(application: App): Context {
         return application.applicationContext
     }
 
@@ -36,4 +37,9 @@ class ApplicationModule(internal var mApplication: Application) {
         return database.storedMovieDao()
     }
 
+    @Provides
+    @Singleton
+    internal fun providesScheduler(): Scheduler {
+        return AndroidSchedulers.mainThread()
+    }
 }

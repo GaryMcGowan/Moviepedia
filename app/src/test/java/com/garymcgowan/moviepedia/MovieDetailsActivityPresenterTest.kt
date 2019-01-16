@@ -2,8 +2,8 @@ package com.garymcgowan.moviepedia
 
 import com.garymcgowan.moviepedia.model.Movie
 import com.garymcgowan.moviepedia.model.MovieRepository
-import com.garymcgowan.moviepedia.view.details.MovieDetailsActivityContract
-import com.garymcgowan.moviepedia.view.details.MovieDetailsActivityPresenter
+import com.garymcgowan.moviepedia.view.details.MovieDetailsContract
+import com.garymcgowan.moviepedia.view.details.MovieDetailsPresenter
 import io.reactivex.Single
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -20,9 +20,9 @@ class MovieDetailsActivityPresenterTest {
 
     //@Rule open var mockitoRule = MockitoJUnit.rule()
 
-    @Mock lateinit var view: MovieDetailsActivityContract.View
+    @Mock lateinit var view: MovieDetailsContract.View
     @Mock lateinit var movieRepository: MovieRepository
-    lateinit var presenter: MovieDetailsActivityPresenter
+    lateinit var presenter: MovieDetailsPresenter
     private val MOVIE = Movie()
 
 
@@ -31,7 +31,7 @@ class MovieDetailsActivityPresenterTest {
         MockitoAnnotations.initMocks(this)
         RxJavaPlugins.setIoSchedulerHandler { scheduler -> Schedulers.trampoline() }
 
-        presenter = MovieDetailsActivityPresenter(view, movieRepository, Schedulers.trampoline())
+        presenter = MovieDetailsPresenter( movieRepository, Schedulers.trampoline())
 
     }
 
@@ -46,7 +46,7 @@ class MovieDetailsActivityPresenterTest {
 
         presenter.loadMovieDetails("123")
 
-        verify<MovieDetailsActivityContract.View>(view).displayMovieDetails(MOVIE)
+        verify<MovieDetailsContract.View>(view).displayMovieDetails(MOVIE)
     }
 
     @Test
@@ -55,7 +55,7 @@ class MovieDetailsActivityPresenterTest {
 
         presenter.loadMovieDetails("123")
 
-        verify<MovieDetailsActivityContract.View>(view).displayError(Mockito.anyString())
+        verify<MovieDetailsContract.View>(view).displayError(Mockito.anyString())
     }
 
 }

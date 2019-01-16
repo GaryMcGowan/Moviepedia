@@ -1,35 +1,23 @@
 package com.garymcgowan.moviepedia
 
-import android.app.Application
-
-import com.garymcgowan.moviepedia.dagger.ApplicationComponent
-import com.garymcgowan.moviepedia.dagger.ApplicationModule
-import com.garymcgowan.moviepedia.dagger.DaggerApplicationComponent
-import com.garymcgowan.moviepedia.dagger.NetworkModule
-
+import com.garymcgowan.moviepedia.dagger.DaggerAppComponent
+import dagger.android.AndroidInjector
+import dagger.android.support.DaggerApplication
 import timber.log.Timber
 
-class App : Application() {
+class App : DaggerApplication()
+{
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> = DaggerAppComponent.builder().application(this).build()
 
     companion object {
         const val mBaseUrl = "http://www.omdbapi.com"
     }
 
-    lateinit var component: ApplicationComponent
-
     override fun onCreate() {
         super.onCreate()
-        component = initDagger(this)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-
     }
-
-    private fun initDagger(app: App): ApplicationComponent =
-            DaggerApplicationComponent.builder()
-                    .networkModule(NetworkModule(mBaseUrl))
-                    .applicationModule(ApplicationModule(app))
-                    .build()
 }

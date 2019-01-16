@@ -4,7 +4,7 @@ import com.garymcgowan.moviepedia.model.Movie
 import io.reactivex.Flowable
 import io.reactivex.annotations.NonNull
 
-interface MovieListActivityContract {
+interface MovieListContract {
 
     interface View {
         fun displayMovies(movies: List<Movie>)
