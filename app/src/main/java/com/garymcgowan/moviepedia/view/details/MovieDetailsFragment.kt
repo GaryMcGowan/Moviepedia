@@ -1,27 +1,33 @@
 package com.garymcgowan.moviepedia.view.details
 
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
-import com.garymcgowan.moviepedia.BaseActivity
+import android.view.View
+import android.view.ViewGroup
+import com.garymcgowan.moviepedia.BaseFragment
 import com.garymcgowan.moviepedia.R
 import com.garymcgowan.moviepedia.model.Movie
-import com.garymcgowan.moviepedia.network.OmdbMovieRepository
 import com.squareup.picasso.Picasso
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.annotations.NonNull
-import kotlinx.android.synthetic.main.activity_details.*
+import kotlinx.android.synthetic.main.fragment_details.*
 import timber.log.Timber
 import javax.inject.Inject
 
 
-class MovieDetailsActivity : BaseActivity(), MovieDetailsContract.View {
+class MovieDetailsFragment : BaseFragment(), MovieDetailsContract.View {
 
     companion object {
-        val ARG_ITEM_ID = "imdb_id"
-        val ARG_ITEM_TITLE = "movie_title"
+        const val ARG_ITEM_ID = "imdb_id"
+        const val ARG_ITEM_TITLE = "movie_title"
+
+        fun safeArgs(imdbId: String, movieTitle: String) = Bundle().apply {
+            putString(ARG_ITEM_ID,imdbId)
+            putString(ARG_ITEM_TITLE,movieTitle)
+        }
     }
 
     @Inject lateinit var picasso: Picasso
@@ -30,13 +36,17 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsContract.View {
 
     @Inject lateinit var presenter: MovieDetailsPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.fragment_details, container, false)
+    }
 
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        (activity as? AppCompatActivity)?.supportActionBar?.setHomeButtonEnabled(true)
 
         //clear dummy text
         ratedTextView.text = null
@@ -48,17 +58,19 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsContract.View {
         writerTextView.text = null
         awardsTextView.text = null
 
-        val imdbId = intent.getStringExtra(ARG_ITEM_ID)
-        val title = intent.getStringExtra(ARG_ITEM_TITLE)
+
+        val imdbId = arguments?.getString(ARG_ITEM_ID)
+        val title = arguments?.getString(ARG_ITEM_TITLE)
 
         toolbar.apply {
-            title?.let {  (toolbar_layout as? Toolbar)?.title = it }
+            title?.let { (toolbar_layout as? Toolbar)?.title = it }
         }
 
         imdbId?.let { presenter.loadMovieDetails(it) }
     }
 
-    fun setMovie(@NonNull movie: Movie?) {
+
+    private fun setMovie(@NonNull movie: Movie?) {
         this.movie = movie
 
         assert(movie != null)
@@ -91,7 +103,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsContract.View {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            finish()
+            //todo go back
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -106,6 +118,7 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsContract.View {
     override fun onDestroy() {
         super.onDestroy()
         presenter.clearDisposables()
+        presenter.dropView()
     }
 
     override fun displayMovieDetails(movieDetails: Movie) {
@@ -113,14 +126,10 @@ class MovieDetailsActivity : BaseActivity(), MovieDetailsContract.View {
     }
 
     override fun displayError(message: String) {
-        //show nice message
-        val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setTitle("Error")
-        alertDialogBuilder.setMessage("Something went wrong")
-        alertDialogBuilder.create().show()
-
         Timber.d("Error: $message")
+        context?.let {
+            AlertDialog.Builder(it).setTitle("Error").setMessage("Something went wrong").create().show()
+        }
     }
-
 
 }

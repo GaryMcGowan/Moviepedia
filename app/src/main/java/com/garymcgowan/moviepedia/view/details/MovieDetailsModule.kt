@@ -8,8 +8,8 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class MovieDetailsModule {
 
-    @ContributesAndroidInjector()
-    abstract fun bindMovieDetailsActivity(): MovieDetailsActivity
+    @ContributesAndroidInjector
+    abstract fun bindMovieDetailsFragment(): MovieDetailsFragment
 
     @Binds
     abstract fun bindMovieListPresenter(presenter: MovieDetailsPresenter): MovieDetailsContract.Presenter

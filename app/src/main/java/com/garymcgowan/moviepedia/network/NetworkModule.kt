@@ -1,6 +1,6 @@
 package com.garymcgowan.moviepedia.network
 
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import android.util.Log
 import com.garymcgowan.moviepedia.App
 import com.garymcgowan.moviepedia.model.MovieRepository

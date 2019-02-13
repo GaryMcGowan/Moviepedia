@@ -1,11 +1,12 @@
 package com.garymcgowan.moviepedia.dagger
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import android.content.Context
 import com.garymcgowan.moviepedia.App
 import com.garymcgowan.moviepedia.persistence.AppDatabase
 import com.garymcgowan.moviepedia.persistence.StoredMovieDao
 import com.garymcgowan.moviepedia.view.details.MovieDetailsModule
+import com.garymcgowan.moviepedia.view.favourite.FavouriteModule
 import com.garymcgowan.moviepedia.view.search.MovieListModule
 import dagger.Module
 import dagger.Provides
@@ -15,6 +16,7 @@ import javax.inject.Singleton
 
 @Module(includes = [
     MovieListModule::class,
+    FavouriteModule::class,
     MovieDetailsModule::class
 ])
 class AppModule {

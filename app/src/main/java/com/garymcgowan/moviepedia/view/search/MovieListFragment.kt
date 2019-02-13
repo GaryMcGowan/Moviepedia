@@ -3,58 +3,63 @@ package com.garymcgowan.moviepedia.view.search
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
-import android.view.Menu
-import android.view.View
-import com.garymcgowan.moviepedia.BaseActivity
+import android.view.*
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
+import com.garymcgowan.moviepedia.BaseFragment
 import com.garymcgowan.moviepedia.R
 import com.garymcgowan.moviepedia.model.Movie
 import com.garymcgowan.moviepedia.widget.VariableColumnGridLayoutManager
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import io.reactivex.BackpressureStrategy
-import kotlinx.android.synthetic.main.activity_list.*
+import kotlinx.android.synthetic.main.fragment_search_list.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class MovieListActivity : BaseActivity(), MovieListContract.View {
+class MovieListFragment : BaseFragment(), MovieListContract.View {
 
     @Inject lateinit var presenter: MovieListPresenter
 
     private var searchView: SearchView? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_list)
-
-        setSupportActionBar(toolbar)
-        toolbar.title = title
-        toolbar.setNavigationIcon(R.mipmap.movie_white)
-        assert(recyclerView != null)
-
-        recyclerView.layoutManager = VariableColumnGridLayoutManager(this, R.dimen.list_item_width)
-        setupRecyclerView(recyclerView, null)
-
-        searchView?.let { searchView ->
-            presenter.setSearchTermObservable(RxSearchView.queryTextChanges(searchView).toFlowable(BackpressureStrategy.LATEST).map { it.toString() })
-        }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        setHasOptionsMenu(true);
+        return inflater.inflate(R.layout.fragment_search_list, container, false)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_list, menu)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val searchItem = menu.findItem(R.id.action_search)
+        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
+        (activity as? AppCompatActivity)?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.apply {
+            title = title
+            setNavigationIcon(R.mipmap.movie_white)
+            //setNavigationOnClickListener { presenter.onCancelPressed() }
+        }
 
-        val searchManager = this@MovieListActivity.getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        context?.let { context ->
+            recyclerView.layoutManager = VariableColumnGridLayoutManager(context, R.dimen.list_item_width)
+            setupRecyclerView(recyclerView, null)
+        }
+
+        setSearchView(searchView)
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_list, menu)
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchManager = activity?.getSystemService(Context.SEARCH_SERVICE) as? SearchManager
 
         if (searchItem != null) {
             setSearchView(searchItem.actionView as SearchView)
         }
-        searchView?.setSearchableInfo(searchManager.getSearchableInfo(this@MovieListActivity.componentName))
+        searchView?.setSearchableInfo(searchManager?.getSearchableInfo(activity?.componentName))
 
-        return super.onCreateOptionsMenu(menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun setSearchView(searchView: SearchView?) {
@@ -105,11 +110,14 @@ class MovieListActivity : BaseActivity(), MovieListContract.View {
     }
 
     override fun displayError(message: String) {
-        //show nice message
-        val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setTitle("Error")
-        alertDialogBuilder.setMessage("Something went wrong")
-        alertDialogBuilder.create().show()
+
+        context?.let {
+            //show nice message
+            val alertDialogBuilder = AlertDialog.Builder(it)
+            alertDialogBuilder.setTitle("Error")
+            alertDialogBuilder.setMessage("Something went wrong")
+            alertDialogBuilder.create().show()
+        }
 
         Timber.d("Error: $message")
     }

@@ -13,16 +13,14 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 
-class MovieListPresenter @Inject constructor(private val movieRepository: MovieRepository, private val storedMovieDao: StoredMovieDao, private val mainScheduler: Scheduler) : BasePresenter(), MovieListContract.Presenter {
+class MovieListPresenter @Inject constructor(
+        private val movieRepository: MovieRepository,
+        private val storedMovieDao: StoredMovieDao,
+        private val mainScheduler: Scheduler
+) : BasePresenter<MovieListContract.View>(), MovieListContract.Presenter {
 
     companion object {
         private val QUERY_UPDATE_DELAY_MILLIS: Long = 400
-    }
-
-    private var view: MovieListContract.View? = null
-
-    fun takeView(view: MovieListContract.View) {
-        this.view = view
     }
 
     override fun setSearchTermObservable(@NonNull flowable: Flowable<String>) {
@@ -35,12 +33,12 @@ class MovieListPresenter @Inject constructor(private val movieRepository: MovieR
                 }.map { list ->
                     list.toMutableList().apply { addAll(storedMovieDao.getAll().map { it.toMovie() }) }
                 }.observeOn(mainScheduler).subscribe({ search ->
-                    if (search == null) view?.displayError("movies null")
-                    else view?.displayMovies(search)
+                    if (search == null) getView()?.displayError("movies null")
+                    else getView()?.displayMovies(search)
                 }, { error ->
                     Timber.d("onError: $error")
                     Timber.e(error)
-                    view?.displayError("onError: " + error.localizedMessage)
+                    getView()?.displayError("onError: " + error.localizedMessage)
                 }
 
                 ))

@@ -16,4 +16,9 @@
     <string name="empty_text_first_time">Search for a movie title</string>
     <string name="contentDescriptionPoster">Title Poster</string>
 
+
+    <string name="search"> Search </string>
+    <string name="favourite"> Favourite </string>
+    <string name="details"> Details </string>
+
 </resources>

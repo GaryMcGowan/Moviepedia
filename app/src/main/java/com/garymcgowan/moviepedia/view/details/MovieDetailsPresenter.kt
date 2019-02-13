@@ -11,13 +11,13 @@ import javax.inject.Inject
 class MovieDetailsPresenter @Inject constructor(
         private val movieRepository: MovieRepository,
         private val mainScheduler: Scheduler
-) : BasePresenter(), MovieDetailsContract.Presenter {
+) : BasePresenter<MovieDetailsContract.View>(), MovieDetailsContract.Presenter {
 
-    private var view: MovieDetailsContract.View? = null
+    //private var view: MovieDetailsContract.View? = null
 
-    fun takeView(view: MovieDetailsContract.View) {
-        this.view = view
-    }
+//    fun takeView(view: MovieDetailsContract.View) {
+//        this.view = view
+//    }
 
     override fun loadMovieDetails(movieId: String) {
         addDisposable(movieRepository.getMovieDetails(movieId)
@@ -25,12 +25,12 @@ class MovieDetailsPresenter @Inject constructor(
                 .observeOn(mainScheduler)
                 .subscribe({ movie ->
                     if (movie == null) {
-                        view?.displayError("details not found")
+                        getView()?.displayError("details not found")
                     } else {
-                        view?.displayMovieDetails(movie)
+                        getView()?.displayMovieDetails(movie)
                     }
                 }, { error ->
-                    view?.displayError("onError: " + error.localizedMessage)
+                    getView()?.displayError("onError: " + error.localizedMessage)
                 })
         )
     }

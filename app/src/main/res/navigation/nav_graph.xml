@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/navigation_search">
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.garymcgowan.moviepedia.view.search.MovieListFragment"
+        android:label="@string/search">
+        <action android:id="@+id/action_navigation_search_to_navigation_details"
+                app:destination="@id/navigation_details"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_favourite"
+        android:name="com.garymcgowan.moviepedia.view.favourite.FavouriteFragment"
+        android:label="@string/favourite">
+        <action android:id="@+id/action_navigation_favourite_to_navigation_details"
+                app:destination="@id/navigation_details"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_details"
+        android:name="com.garymcgowan.moviepedia.view.details.MovieDetailsFragment"
+        android:label="@string/details">
+        <argument android:name="imdb_id" app:argType="string"/>
+        <argument android:name="movie_title" app:argType="string"/>
+    </fragment>
+
+</navigation>

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Movie(
     //Summary fields (returned by search)
-        @SerializedName("Title") var title: String? = null,
+        @SerializedName("Title") var title: String = "",
         @SerializedName("Year") var year: String? = null,
         @SerializedName("imdbID") var imdbID: String,
         @SerializedName("Type") var type: String? = null,

@@ -1,8 +1,8 @@
 package com.garymcgowan.moviepedia.persistence
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.garymcgowan.moviepedia.model.Movie
 import com.google.gson.annotations.SerializedName
 
@@ -35,6 +35,6 @@ data class StoredMovie(
     constructor(movie: Movie) : this(movie.title, movie.year, movie.imdbID, movie.type, movie.posterURL, movie.rated, movie.released, movie.runtime, movie.genre, movie.director,
             movie.writer, movie.actors, movie.plot, movie.language, movie.country, movie.awards, movie.metascore, movie.imdbRating, movie.imdbVotes)
 
-    fun toMovie() = Movie(title, year, imdbID, type, posterURL, rated, released, runtime, genre, director, writer, actors, plot, language, country, awards, metascore, imdbRating, imdbVotes)
+    fun toMovie() = Movie(title!!, year, imdbID, type, posterURL, rated, released, runtime, genre, director, writer, actors, plot, language, country, awards, metascore, imdbRating, imdbVotes)
 }
 

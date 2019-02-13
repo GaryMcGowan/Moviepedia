@@ -7,8 +7,8 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class MovieListModule {
 
-    @ContributesAndroidInjector()
-    abstract fun bindMovieListActivity(): MovieListActivity
+    @ContributesAndroidInjector
+    abstract fun bindMovieListFragment(): MovieListFragment
 
     @Binds
     abstract fun bindMovieListPresenter(presenter: MovieListPresenter): MovieListContract.Presenter

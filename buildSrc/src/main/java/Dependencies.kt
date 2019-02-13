@@ -1,17 +1,17 @@
 // added ben-manes Versions plugin to check deps version upgrades. run gradle JourneyPlanner:dependecyUpdates
 
 object BuildCfg {
-    const val compileSdk = 27
+    const val compileSdk = 28
     const val minSdk = 19
-    const val targetSdk = 27
+    const val targetSdk = 28
     const val buildTools = "28.0.3"
 }
 
 object Versions {
-    const val supportLibrary = "27.1.1"
+    const val supportLibrary = "28.0.0"
     const val playServices = "11.4.0"
     const val atsl = "1.0.2"
-    const val kotlin = "1.3.11"
+    const val kotlin = "1.3.21"
     const val okhttp = "3.12.1"
     const val retrofit = "2.5.0"
     const val dagger = "2.20"
